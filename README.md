@@ -15,7 +15,9 @@ To get started, perform these steps on your EdgeRouter from a CLI configure prom
   a. `chmod +x /config/scripts/post-config.d/loadBlackList.sh`
 6. `set system task-scheduler task Update-Blacklists executable path /config/scripts/updBlackList.sh`  
 7. `set system task-scheduler task Update-Blacklists interval 12h`  
-8. `sudo /config/scripts/updBlackList.sh`  
+8. `commit` # commits to config
+9. `save` # saves config
+10. `sudo /config/scripts/updBlackList.sh`  # Update things!
 
 You will also need to create a firewall rule to deny inbound source addresses
 that match this network-group `Nets4-BlackList`.  An example using
