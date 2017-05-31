@@ -15,21 +15,27 @@ To get started, perform these steps on your EdgeRouter from a CLI configure prom
   a. `chmod +x /config/scripts/post-config.d/loadBlackList.sh`
 6. `set system task-scheduler task Update-Blacklists executable path /config/scripts/updBlackList.sh`  
 7. `set system task-scheduler task Update-Blacklists interval 12h`  
-8. `commit` # commits to config
-9. `save` # saves config
-10. `sudo /config/scripts/updBlackList.sh`  # Update things!
+8. `sudo /config/scripts/updBlackList.sh`  # Update ip lists!
 
 You will also need to create a firewall rule to deny inbound source addresses
 that match this network-group `Nets4-BlackList`.  An example using
 a zone-based firewall might look like:  
-1. `set firewall name wan-dmz-4 rule 1 source group network-group Nets4-BlackList`  
-2. `set firewall name wan-lan-4 rule 1 source group network-group Nets4-BlackList`  
-3. `set firewall name wan-self-4 rule 1 source group network-group Nets4-BlackList`  
+1. `set firewall name WAN_IN rule 1 source group network-group Nets4-BlackList`  
+  a. `set firewall name WAN_IN rule 1 action drop`
+  b. `set firewall name WAN_IN rule 1 description 'Drop packets matching Nets4-BlackList FW group'`
+2. `set firewall name WAN_LOCAL rule 1 source group network-group Nets4-BlackList`   
+  a. `set firewall name WAN_LOCAL rule 1 action drop`
+  b. `set firewall name WAN_LOCAL rule 1 description 'Drop packets matching Nets4-BlackList FW group'`
 
 Similar for IPv6:
-1. `set firewall ipv6-name wan-dmz-6 rule 1 source group ipv6-network-group Nets6-BlackList`  
-2. `set firewall ipv6-name wan-lan-6 rule 1 source group ipv6-network-group Nets6-BlackList`  
-3. `set firewall ipv6-name wan-self-6 rule 1 source group ipv6-network-group Nets6-BlackList`  
+1. `set firewall ipv6-name WANv6_IN rule 1 source group ipv6-network-group Nets6-BlackList`  
+  a. `set firewall name WANv6_IN rule 1 action drop`
+  b. `set firewall name WANv6_IN rule 1 description 'Drop packets matching Nets6-BlackList FW group'`
+2. `set firewall ipv6-name WANv6_LOCAL rule 1 source group ipv6-network-group Nets6-BlackList`  
+  a. `set firewall name WANv6_LOCAL rule 1 action drop`
+  b. `set firewall name WANv6_LOCAL rule 1 description 'Drop packets matching Nets6-BlackList FW group'`
+3. `commit` # commits to config
+4. `save` # saves config
 
 That should get you going with minimal effort.  However, you really should
 review `fw-BlackList-URLs.txt` and edit as appropriate.  The two scripts
